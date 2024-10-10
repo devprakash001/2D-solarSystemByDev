@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2D Solar System</title>
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #000;
+            overflow: hidden;
+        }
+        .solar-system {
+            position: relative;
+            width: 1200px;
+            height: 1200px;
+        }
+        .sun {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: #ffd700;
+            box-shadow: 0 0 60px #ffd700;
+        }
+        .planet, .moon {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            border-radius: 50%;
+            transform-origin: center;
+        }
+        .orbit {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            border-radius: 50%;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transform: translate(-50%, -50%);
+        }
+        #mercury {
+            width: 8px;
+            height: 8px;
+            background-color: #8a8a8a;
+        }
+        #venus {
+            width: 12px;
+            height: 12px;
+            background-color: #ffa500;
+        }
+        #earth {
+            width: 13px;
+            height: 13px;
+            background-color: #4169e1;
+        }
+        #mars {
+            width: 10px;
+            height: 10px;
+            background-color: #ff4500;
+        }
+        #jupiter {
+            width: 36px;
+            height: 36px;
+            background-color: #ffa07a;
+        }
+        #saturn {
+            width: 30px;
+            height: 30px;
+            background-color: #f0e68c;
+        }
+        #uranus {
+            width: 26px;
+            height: 26px;
+            background-color: #40e0d0;
+        }
+        #neptune {
+            width: 24px;
+            height: 24px;
+            background-color: #4169e1;
+        }
+        .moon {
+            width: 3px;
+            height: 3px;
+            background-color: #c0c0c0;
+        }
+        #asteroid-belt {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 520px;
+            height: 520px;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            border: 8px dotted rgba(169, 169, 169, 0.4);
+        }
+    </style>
+</head>
+<body>
+    <div class="solar-system">
+        <div class="sun"></div>
+        <div class="orbit" style="width: 140px; height: 140px;"></div>
+        <div class="orbit" style="width: 200px; height: 200px;"></div>
+        <div class="orbit" style="width: 260px; height: 260px;"></div>
+        <div class="orbit" style="width: 320px; height: 320px;"></div>
+        <div id="asteroid-belt"></div>
+        <div class="orbit" style="width: 620px; height: 620px;"></div>
+        <div class="orbit" style="width: 780px; height: 780px;"></div>
+        <div class="orbit" style="width: 920px; height: 920px;"></div>
+        <div class="orbit" style="width: 1060px; height: 1060px;"></div>
+        <div id="mercury" class="planet"></div>
+        <div id="venus" class="planet"></div>
+        <div id="earth" class="planet"></div>
+        <div id="mars" class="planet"></div>
+        <div id="jupiter" class="planet"></div>
+        <div id="saturn" class="planet"></div>
+        <div id="uranus" class="planet"></div>
+        <div id="neptune" class="planet"></div>
+    </div>
+
+    <script>
+        function createMoons(planetId, moonCount, orbitRadius) {
+            const planet = document.getElementById(planetId);
+            for (let i = 0; i < moonCount; i++) {
+                const moon = document.createElement('div');
+                moon.className = 'moon';
+                moon.style.width = '3px';
+                moon.style.height = '3px';
+                planet.appendChild(moon);
+            }
+        }
+
+        createMoons('earth', 1, 20);
+        createMoons('mars', 2, 18);
+        createMoons('jupiter', 4, 50);
+        createMoons('saturn', 5, 45);
+        createMoons('uranus', 3, 35);
+        createMoons('neptune', 2, 30);
+
+        function animatePlanets() {
+            const planets = document.querySelectorAll('.planet');
+            let angle = 0;
+
+            const distances = [70, 100, 130, 160, 310, 390, 460, 530];
+            const speeds = [4.74, 3.50, 2.98, 2.41, 1.31, 0.97, 0.68, 0.54];
+
+            function animate() {
+                angle += 0.005;
+                
+                planets.forEach((planet, index) => {
+                    const speed = speeds[index];
+                    const distance = distances[index];
+                    planet.style.transform = `rotate(${angle * speed}rad) translate(${distance}px) rotate(-${angle * speed}rad)`;
+
+                    const moons = planet.querySelectorAll('.moon');
+                    moons.forEach((moon, moonIndex) => {
+                        const moonSpeed = 2 + moonIndex;
+                        const moonDistance = 20 + moonIndex * 5;
+                        moon.style.transform = `rotate(${angle * moonSpeed}rad) translate(${moonDistance}px) rotate(-${angle * moonSpeed}rad)`;
+                    });
+                });
+
+                requestAnimationFrame(animate);
+            }
+
+            animate();
+        }
+
+        animatePlanets();
+    </script>
+</body>
+</html>
